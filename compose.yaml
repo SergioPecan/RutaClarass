@@ -1,0 +1,35 @@
+
+services:
+  app:
+    container_name: "application_layer"
+    build:
+      context: RutaClaraService
+      dockerfile: Dockerfile
+
+
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongodb:27017/RutaClaraDB
+      SPRING_DATA_MONGODB_USERNAME: root
+      SPRING_DATA_MONGODB_PASSWORD: password
+      SPRING_DATA_MONGODB_ROOT_USERNAME: root
+
+    depends_on:
+        - mongodb
+  mongodb:
+    image: "mongo:latest"
+    container_name: "database_layer"
+    hostname: "host-mongo"
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db
+      - ./data/log:/var/log/mongodb
+    environment:
+      MONGO_DATABASE: "RutaClaraDB"
+      MONGO_INITDB_ROOT_USERNAME: "root"
+      MONGO_INITDB_ROOT_PASSWORD: "password"
+      MONGO_ROOT_PASSWORD: "password"
+
+
